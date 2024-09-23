@@ -8,5 +8,6 @@
         <typeAlias alias="userResponseDTO"  type="com.example.demo.user.domain.UserResponseDTO" />
     <!-- board -->
         <typeAlias alias="boardResponseDTO"  type="com.example.demo.board.domain.BoardResponseDTO" />
+        <typeAlias alias="userBoardResponseDTO"  type="com.example.demo.board.domain.UserBoardResponseDTO" />
     </typeAliases>
 </configuration>

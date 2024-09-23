@@ -8,4 +8,15 @@
         SELECT BNO, TITLE, CONTENT, REGDATE, VIEWCNT, WRITER
         FROM   PROJECT_BOARD_TBL
     </select>    
+
+    <!-- myHistoryRow --> 
+
+    <select id="myHistoryRow"
+            parameterType="java.lang.String"
+            resultType="userBoardResponseDTO">
+        select u.id, b.title, b.content, b.regdate, b.viewcnt, b.bno, b.writer
+        from project_user_tbl u
+        join project_board_tbl b ON(u.id = b.writer)
+        where id = #{id};
+    </select>
 </mapper>
