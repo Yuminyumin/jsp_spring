@@ -3,7 +3,10 @@
 
 <configuration>
     <typeAliases>
+    <!-- user -->
         <typeAlias alias="userRequestDTO" type="com.example.demo.user.domain.UserRequestDTO" />
         <typeAlias alias="userResponseDTO"  type="com.example.demo.user.domain.UserResponseDTO" />
+    <!-- board -->
+        <typeAlias alias="boardResponseDTO"  type="com.example.demo.board.domain.BoardResponseDTO" />
     </typeAliases>
 </configuration>
