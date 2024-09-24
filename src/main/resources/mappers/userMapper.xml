@@ -10,4 +10,12 @@
         FROM   PROJECT_USER_TBL
         WHERE  ID = #{id} and PWD = #{pwd}
     </select>    
+
+    <!-- joinRow --> 
+
+    <insert id="joinRow"
+            parameterType="userRequestDTO">
+        INSERT INTO project_user_tbl(ID, PWD, NAME, IMGURL)
+        VALUES (#{id}, #{pwd}, #{name}, 'images.png')
+    </insert>
 </mapper>

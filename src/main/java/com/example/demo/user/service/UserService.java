@@ -14,7 +14,12 @@ public class UserService {
     private UserMapper userMapper;
     
     public UserResponseDTO login(UserRequestDTO params){
-        System.out.println("debug >>> UserService login");
+        System.out.println("debug >>> UserService login ");
         return userMapper.loginRow(params);
+    }
+
+    public void join(UserRequestDTO params){
+        System.out.println("debug >>> UserService join ");
+        userMapper.joinRow(params);
     }
 }
