@@ -2,14 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.user.dao.UserMapper" >
-
-    <select id="loginRow"
+    <!-- 암호화 전 로그인 구현 -->
+    <!-- <select id="loginRow"
             parameterType="userRequestDTO"
             resultType="userResponseDTO">
         SELECT ID, PWD, NAME, POINT, IMGURL
         FROM   PROJECT_USER_TBL
         WHERE  ID = #{id} and PWD = #{pwd}
-    </select>    
+    </select>     -->
+
+    <!-- 암호화 로그인 -->
+    <select id="loginRow"
+            parameterType="userRequestDTO"
+            resultType="userResponseDTO">
+        SELECT ID, PWD, NAME, POINT, IMGURL
+        FROM   PROJECT_USER_TBL
+        WHERE  ID = #{id}
+    </select>  
 
     <!-- joinRow --> 
 

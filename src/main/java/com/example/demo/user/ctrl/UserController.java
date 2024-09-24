@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.user.domain.UserRequestDTO;
 import com.example.demo.user.domain.UserResponseDTO;
@@ -36,16 +37,31 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login.multicampus")
-    public String login(UserRequestDTO params, HttpSession session) {
+    public String login(UserRequestDTO params, HttpSession session, RedirectAttributes attributes) {
+
         System.out.println("debug >>> UserController user endpoint : /user/login.multicampus");
         System.out.println("debug >>> params : "+ params);
         UserResponseDTO result = userService.login(params);
         System.out.println("debug >>> result : "+result);
         
         if( result != null){
-            session.setAttribute("loginUser", result);
-            return "landing";
+            //암호화 이후 로그인 처리 구현부
+            //비밀번호 일치 여부를 matches() 메서드를 이용해서 확인
+            String userPwd    = params.getPwd();
+            String encoderPwd = result.getPwd();
+            
+            if(passwordEncoder.matches(userPwd, encoderPwd)){
+                System.out.println("debug >>> matches() true ");
+                result.setPwd("");
+                // jsp 상태관리(트래킹 매커니즘) - request(포워드 되는 페이지까지만), session(모든 페이지)
+                session.setAttribute("loginUser", result);
+                return "landing";
+            } else{
+                attributes.addFlashAttribute("loginFail","비밀번호가 일치하지 않습니다");
+                return "redirect:/";
+            }
         } else{
+            attributes.addFlashAttribute("loginFail","아이디 또는 비밀번호가 일치하지 않습니다");
             return "redirect:/";
         }
     }
@@ -75,8 +91,10 @@ public class UserController {
                 String key = field.getField();
                 String msg = field.getDefaultMessage();
                 System.out.println(key +"\t"+msg);
-                model.addAttribute(key, msg);
+                map.put(key, msg);
+                // model.addAttribute(key, msg);
             }
+            model.addAttribute("errMap", map);
             return "join";
         } else {
             System.out.println("debug >>> 유효성 검증 통과");
