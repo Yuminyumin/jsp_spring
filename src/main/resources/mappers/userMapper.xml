@@ -25,6 +25,6 @@
     <insert id="joinRow"
             parameterType="userRequestDTO">
         INSERT INTO project_user_tbl(ID, PWD, NAME, IMGURL)
-        VALUES (#{id}, #{pwd}, #{name}, 'images.png')
+        VALUES (#{id}, #{pwd}, #{name}, #{imgUrl})
     </insert>
 </mapper>
