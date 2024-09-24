@@ -11,4 +11,7 @@ public class UserRequestDTO {
     private String pwd;
     @NotBlank(message = "이름은 필수 입력사항입니다")
     private String name;
+    ///////////////// img upload
+    private String filename;
+    private String filepath;
 }

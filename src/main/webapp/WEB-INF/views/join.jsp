@@ -25,7 +25,7 @@
 			<div class="login-box-body">
 			  <p class="login-box-msg">Sign in to start your session</p>
 	  
-	  <form action="/user/join.multicampus" method="post">
+	  <form action="/user/join.multicampus" method="post" enctype="multipart/form-data">
 		<div class="form-group has-feedback">
 		  <input type="text" name="id" class="form-control" placeholder="USER ID"/>
 		  <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -41,6 +41,11 @@
 		  <span class="glyphicon glyphicon-lock form-control-feedback"></span>
 		  ${errMap.name}
 		</div>
+        <!-- img upload -->
+        <div class="form-group has-feedback">
+            <input type="file" name="file" class="form-control" placeholder="Image Upload"/>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        </div>
 		<div class="row">
 		  <div class="col-xs-8">    
 			<div class="checkbox icheck">

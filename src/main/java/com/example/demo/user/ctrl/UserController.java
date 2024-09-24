@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.user.domain.UserRequestDTO;
@@ -80,7 +81,7 @@ public class UserController {
     }
     
     @PostMapping("/join.multicampus")
-    public String join(@Valid UserRequestDTO params, BindingResult bindResult, Model model) {
+    public String join(@Valid UserRequestDTO params, BindingResult bindResult, Model model, MultipartFile file) {
         System.out.println("debug >>> UserController user endpoint post : /user/join.multicampus");
         if(bindResult.hasErrors()){
             System.out.println("debug >>> valid has errors");
@@ -104,7 +105,7 @@ public class UserController {
             String encoderPwd = passwordEncoder.encode(params.getPwd());
             System.out.println("encoderPwd = "+encoderPwd);
             params.setPwd(encoderPwd);
-            userService.join(params);
+            userService.join(params,file);
 
             return "redirect:/";
 
