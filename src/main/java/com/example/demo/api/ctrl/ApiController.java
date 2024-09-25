@@ -1,12 +1,18 @@
 package com.example.demo.api.ctrl;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.example.demo.api.domain.SearchDTO;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -14,8 +20,6 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.net.URI;
 
 @RestController
@@ -29,17 +33,20 @@ public class ApiController {
     private String secret;
 
     @GetMapping("/naver/local/{name}")
-    public String local(@PathVariable(name="name") String name) {
+    public ResponseEntity<List<SearchDTO>> local(@PathVariable String name) {
         System.out.println("debug >>> user endpoint : /api/naver/local/{name}");
         System.out.println("debug >>> params = " + name);
-        search(name);
-        return null;
+        List<SearchDTO> list = search(name);
+        return new ResponseEntity<>(list,HttpStatus.OK);
     }
     
     // api 이용하여 장소를 검색하고 반환하는 역할
     // 한글은 인코딩 필수
     // ObjectMappter(json -> dto)
-    public String search(String query){
+    public List<SearchDTO> search(String query){
+
+        List<SearchDTO> list = new ArrayList<>();
+
         try{
             ByteBuffer buffer = StandardCharsets.UTF_8.encode(query);
             String encode = StandardCharsets.UTF_8.decode(buffer).toString();
@@ -68,11 +75,25 @@ public class ApiController {
             //json 형식의 응답
             ResponseEntity<String> response = restTemplate.exchange(request, String.class);
             System.out.println("debug >>> json 형식의 응답 완료!!");
-            System.out.println("debug >>> ");
-            System.out.println("rsponse" + response);
+            // System.out.println("json - ");
+            // System.out.println("rsponse" + response.getBody());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+            JsonNode items = rootNode.path("items");
+
+
+            for(JsonNode item : items){
+                SearchDTO dto = new SearchDTO();
+                dto.setTitle(item.get("title").asText());
+                dto.setAddress(item.get("address").asText());
+                dto.setLat(item.get("mapx").asText());
+                dto.setLng(item.get("mapy").asText());
+                list.add(dto);
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
-        return null;
+        return list;
     }
 }
